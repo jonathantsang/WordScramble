@@ -8,6 +8,10 @@ Need:
 - Scoring Page
 - Leaderboard
 
+Technical:
+- lock to load words into dictionary
+- saving file data
+
 Extras:
 - more modes
 - user interface
