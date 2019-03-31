@@ -38,6 +38,18 @@ public class TileCollider : MonoBehaviour, IPointerEnterHandler {
 		//print ("hover");
 	}
 
+	// Check if the tile was clicked as last one
+	void OnMouseUpAsButton(){
+		int last = gc.getLastId ();
+		if (last == -1) {
+			// submitted sequence is empty
+			return;
+		}
+		if (last == id) {
+			gc.submitSequence ();
+		}
+	}
+
 	//Do this when the cursor enters the rect area of this selectable UI object.
 	public void OnPointerEnter(PointerEventData eventData)
 	{

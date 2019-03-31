@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour {
 
 	// Used in player input
 	public bool pressed = false;
-	private List<tilePair> selectedCharacters = new List<tilePair> ();
+	private List<tilePair> selectedCharacters = new List<tilePair> (); // Pair of (character, id)
 
 	// Use this for initialization
 	void Start () {
@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour {
 			pressed = true;
 		} else {
 			pressed = false;
-			selectedCharacters.Clear (); // Released, not necessarily clear if individual tap for the selected characters
+			// selectedCharacters.Clear (); // Released, not necessarily clear if individual tap for the selected characters
 		}
 	}
 
@@ -69,7 +69,9 @@ public class GameController : MonoBehaviour {
 		if (selectedCharacters.Count > 0 && selectedCharacters[selectedCharacters.Count-1].idx == id 
 			&& selectedCharacters[selectedCharacters.Count-1].c == c){
 			return;
-		} 
+		}
+
+		// Check if it CAN be added, in 8 directions around the tile
 
 		// Is the id in the selectedCharacters? If it is truncate the selectedCharacters
 		for (int i = 0; i < selectedCharacters.Count; i++) {
@@ -85,8 +87,20 @@ public class GameController : MonoBehaviour {
 		printSelectedCharacters ();
 	}
 
-	List<tilePair> getSelectedCharacters(){
-		return selectedCharacters;
+	// Submits the sequence for "processing"
+	public void submitSequence(){
+		// For now we clear it
+		print("submitted");
+		printSelectedCharacters ();
+		selectedCharacters.Clear();
+		pressed = false; // Set for now so it doesn't set path again
+	}
+
+	public int getLastId(){
+		if (selectedCharacters.Count == 0){
+			return -1;
+		}
+		return selectedCharacters [selectedCharacters.Count-1].idx;
 	}
 
 	void printSelectedCharacters(){
