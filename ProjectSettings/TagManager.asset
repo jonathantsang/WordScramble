@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Board
+  - Timer
+  - DataController
   layers:
   - Default
   - TransparentFX

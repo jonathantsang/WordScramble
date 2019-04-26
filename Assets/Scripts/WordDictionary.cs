@@ -5,8 +5,8 @@ using System.IO;
 
 public class WordDictionary : MonoBehaviour {
 	void Start(){
-		WD worddict = new WD ();
-		worddict.readWords ();
+		//WD worddict = new WD ();
+		//worddict.readWords ();
 		print ("done reading words");
 	}
 
@@ -17,6 +17,10 @@ public class WordDictionary : MonoBehaviour {
 
 public class WD {
 	public Dictionary<string, int> words = new Dictionary<string, int> ();
+
+	public WD(){
+		readWords ();	
+	}
 
 	public void readWords() {
 		string path = "Assets/Resources/words_alpha.txt";
@@ -29,6 +33,10 @@ public class WD {
 			word = reader.ReadLine ();
 			if (word == null) {
 				break;
+			}
+			// Need words length >= 3
+			if (word.Length < 3) {
+				continue;
 			}
 			words [word] = 1;
 		}

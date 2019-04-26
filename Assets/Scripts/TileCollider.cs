@@ -14,10 +14,13 @@ public class TileCollider : MonoBehaviour, IPointerEnterHandler {
 
 	// References
 	private GameController gc;
+	private GameObject highlight;
 
 	// Use this for initialization
 	void Start () {
 		gc = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
+		highlight = transform.GetChild (2).gameObject;
+		highlight.SetActive (false);
 	}
 
 	void Awake() {
@@ -62,5 +65,13 @@ public class TileCollider : MonoBehaviour, IPointerEnterHandler {
 
 		print(this.id);
 		tm.text = data.ToString ();
+	}
+
+	public void setHighlight(bool val){
+		if (highlight == null) {
+			highlight = transform.GetChild (2).gameObject;
+			highlight.SetActive (false);
+		}
+		highlight.SetActive (val);
 	}
 }

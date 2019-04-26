@@ -22,9 +22,12 @@ public class GameController : MonoBehaviour {
 	public bool pressed = false;
 	private List<tilePair> selectedCharacters = new List<tilePair> (); // Pair of (character, id)
 
+	DataController datacontroller;
+
 	// Use this for initialization
 	void Start () {
 		Board = GameObject.FindGameObjectWithTag ("Board").gameObject;
+		datacontroller = GameObject.FindGameObjectWithTag ("DataController").GetComponent<DataController> ();
 
 		createBoard (Board);
 	}
@@ -49,7 +52,24 @@ public class GameController : MonoBehaviour {
 			for (int j = 0; j < width; j++) {
 				GameObject obj = Instantiate (tile, new Vector3((j-width/2)*tilew, (i-height/2)*tileh, 0f), Quaternion.identity);
 				TileCollider tc = obj.GetComponent<TileCollider> ();
-				tc.setId (i * height + j, (char)('a'+ i * height + j)); // For now just c, will do random
+				int id = i * height + j;
+
+				// Weighted with vowels
+				// 97, 101, 105, 111, 117 ~121
+				// a    e   i    o     u    y
+				int weight = Random.Range(0, 4);
+				char c = (char) Random.Range (97, 122);
+
+				char[] vowels = new char[] {'a', 'e', 'i', 'o', 'u'};
+				// Change to vowel
+				if (weight == 0) {
+					int rd = Random.Range(0, 4);
+					c = vowels[rd];
+				}
+
+
+				// tc.setId (i * height + j, (char)('a'+ i * height + j)); // For now just c, will do random
+				tc.setId (id, c);
 				obj.transform.parent = Board.gameObject.transform;
 			}
 		}
@@ -84,6 +104,7 @@ public class GameController : MonoBehaviour {
 		}
 		// Add to the end
 		addToSelectedCharacters(c, id);
+		Board.transform.GetChild (id).GetComponent<TileCollider> ().setHighlight (true);
 		printSelectedCharacters ();
 	}
 
@@ -92,7 +113,26 @@ public class GameController : MonoBehaviour {
 		// For now we clear it
 		print("submitted");
 		printSelectedCharacters ();
+
+		// Form word
+		string word = "";
+		foreach (tilePair tp in selectedCharacters) {
+			word += tp.c.ToString ();
+		}
+
+		// Submit to DataController
+		bool res = datacontroller.addWord(word);
+
+		// res will tell us if it is valid or not
+		print("It is " + res + " trying to add word: " + word);
+
 		selectedCharacters.Clear();
+		// Clear highlights
+		// TODO fix 16 tiles
+		for(int i = 0; i < 16; i++){
+			Board.transform.GetChild (i).GetComponent<TileCollider> ().setHighlight (false);
+		}
+
 		pressed = false; // Set for now so it doesn't set path again
 	}
 
@@ -105,10 +145,19 @@ public class GameController : MonoBehaviour {
 
 	void printSelectedCharacters(){
 		string ans = "";
+		string word = "";
 		foreach (tilePair tp in selectedCharacters) {
 			ans += "( " + tp.c.ToString () + " " + tp.idx.ToString () + " )" + " ";
+			word += tp.c.ToString ();
 		}
-		print(ans);
+		print (word);
+		print (ans);
+	}
+
+	// Public methods
+	public void endGame(){
+		// Called by the timer
+
 	}
 
 }
