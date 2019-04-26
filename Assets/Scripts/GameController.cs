@@ -98,7 +98,17 @@ public class GameController : MonoBehaviour {
 			if (selectedCharacters[i].idx == id && selectedCharacters[i].c == c){
 				// Truncate it here
 				print("found truncate");
+
+				// Have to set the highlights correctly
+				for(int j = i; j < selectedCharacters.Count; j++){
+					int turnoffidx = selectedCharacters [j].idx;
+					Board.transform.GetChild (turnoffidx).GetComponent<TileCollider> ().setHighlight (false);
+				}
+
 				selectedCharacters  = selectedCharacters.GetRange (0, i);
+
+
+
 				return;
 			}
 		}
