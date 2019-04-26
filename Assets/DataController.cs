@@ -35,11 +35,21 @@ public class DataController : MonoBehaviour {
 	}
 
 	// Public data
+	public int getScore(){
+		return score;
+	}
+
 	public bool addWord(string word){
 		if (wordsFound.Contains (word)) {
 			return false;
 		} else {
-			return wd.checkWord (word);
+			bool res = wd.checkWord (word);
+			if (res) {
+				// Add length - 2 points
+				score += (word.Length - 2);
+				print (score);
+			}
+			return res;
 		}
 	}
 }

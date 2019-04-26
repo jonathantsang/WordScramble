@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -17,6 +19,7 @@ public class GameController : MonoBehaviour {
 
 	private GameObject Board;
 	public GameObject tile;
+	Text wordsCollection;
 
 	// Used in player input
 	public bool pressed = false;
@@ -28,6 +31,7 @@ public class GameController : MonoBehaviour {
 	void Start () {
 		Board = GameObject.FindGameObjectWithTag ("Board").gameObject;
 		datacontroller = GameObject.FindGameObjectWithTag ("DataController").GetComponent<DataController> ();
+		wordsCollection = GameObject.FindGameObjectWithTag ("WordsCollection").GetComponent<Text> ();
 
 		createBoard (Board);
 	}
@@ -106,9 +110,6 @@ public class GameController : MonoBehaviour {
 				}
 
 				selectedCharacters  = selectedCharacters.GetRange (0, i);
-
-
-
 				return;
 			}
 		}
@@ -135,6 +136,14 @@ public class GameController : MonoBehaviour {
 
 		// res will tell us if it is valid or not
 		print("It is " + res + " trying to add word: " + word);
+
+		// Update side word stats
+		if (res) {
+			if (wordsCollection == null) {
+				wordsCollection = GameObject.FindGameObjectWithTag ("WordsCollection").GetComponent<Text> ();
+			}
+			wordsCollection.text += "\n" + word;
+		}
 
 		selectedCharacters.Clear();
 		// Clear highlights
@@ -167,7 +176,7 @@ public class GameController : MonoBehaviour {
 	// Public methods
 	public void endGame(){
 		// Called by the timer
-
+		SceneManager.LoadScene("Results");
 	}
 
 }
